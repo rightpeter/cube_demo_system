@@ -4,8 +4,9 @@ FROM python:3
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove && apt-get autoclean
 
 RUN apt-get install -y \
+    python-dev \
     libssl-dev \
-    libmysqlclient-dev \
+    default-libmysqlclient-dev \
     vim
 
 
