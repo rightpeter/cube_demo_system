@@ -44,7 +44,7 @@
 	  <label for="reconstruction">Reconstruction</label>
 	</div>
 	<div>
-	  <input type="radio" id="all_topic" name="topic_filter" value="3" checked onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, "{{minDate}}");"/>
+	  <input type="radio" id="all_topic" name="topic_filter" value="3" checked onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
 	  <label for="all_topic">Select All Topics</label>
 	</div>
 {% endblock %}
