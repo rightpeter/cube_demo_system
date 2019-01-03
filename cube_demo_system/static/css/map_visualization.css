@@ -1,0 +1,71 @@
+.slider {
+  -webkit-appearance: none;
+  max-width: 500px;
+  height: 15px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+#tickmarks {
+  display: block;
+}
+
+label {
+	display: inline-block;
+}
+
+#show_all_checkbox{
+	margin: 4px 0px 4px 24px;
+}
+
+.map_container{
+	display: inline-block;
+	width: 25%;
+	margin-right:3%;
+}
+
+#map_current{
+	width: 175%;
+}
+
+#map_container_next{
+	margin-left:5%;
+}
+
+.selectedDated_div{
+	display: inline-block;
+	margin-left: 9%;
+}
+#map_prev, #map_next{
+	opacity: 0.6;
+	width:150%;
+}
+#selectedDate_prev{
+	min-width:20%;
+}
