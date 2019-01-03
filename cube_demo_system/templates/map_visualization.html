@@ -1,113 +1,13 @@
-switchShowAll{% extends "base.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
-{% block javascript %}
-<link rel="stylesheet" href="{% static "css/timeline.css" %}">
-<script>
-	FILL_COLORS=["0", "58", "118", "238"]
-  function getFilledColor(fillColor, percentage){
-    console.log(percentage)
-    return "hsl("+fillColor+", "+Math.min(100, (percentage*100).toFixed(2))+"%, 60%)"
-  }
-	function updateMap(val, svg, range){
-		var topicIndex = parseInt(document.querySelector('input[name="topic_filter"]:checked').value);
-		var fillColor = FILL_COLORS[topicIndex];
-		var dict = new Set();
-    var cellWeight = new Map();
-    // var min = 100;
-    // var max = 0;
-		var i;
-    {% for i in data %}
-    		if( {{ i.time }} < val+range && {{ i.time }} >= val && "{{i.location}}".length && (topicIndex == 3 || {{ i.topics }}[topicIndex] > 0.3 ) ){
-
-          {% for location in i.location %}
-            dict.add("{{location}}");
-
-            if( !cellWeight.has("{{location}}")) {
-              cellWeight.set("{{location}}", 0)
-            }
-
-            if (topicIndex == 3 )
-                svg.getElementById("{{location}}").setAttribute("fill", "hsl(238, 100%, 80%)");
-            else {
-              //svg.getElementById("{{location}}").setAttribute("fill", getFilledColor(fillColor, {{ i.topics }}[topicIndex]));
-              cellWeight.set("{{location}}", cellWeight.get("{{location}}") + {{ i.topics }}[topicIndex])
-              // if(cellWeight.get("{{ location }}") > max) max = cellWeight.get("{{location}}")
-              // if (cellWeight.get("{{ location }}") < min ) min = cellWeight.get("{{ location }}")
-            }
-          {% endfor %}
-
-        } else{
-          // change the color back to default color
-          {% for location in i.location %}
-      			if (!dict.has("{{location}}") && "{{location}}" != "None"){
-      				svg.getElementById("{{location}}").setAttribute("fill", "#CCCCCC");
-      			}
-          {% endfor %}
-
-    		}
-    {% endfor %}
-    // var range = max - min;
-    if(topicIndex!=3){
-        cellWeight.forEach(function(value, location, map){
-          svg.getElementById(location).setAttribute("fill", getFilledColor(fillColor, value));
-        })
-      }
-  }
-    function updateDate(originDate, id, val){
-    	var minDate = new Date(originDate.toDateString())
-    	minDate.setDate(minDate.getDate() + val);
-    	var minDateString = minDate.toDateString()
-		minDate.setDate(minDate.getDate() + 2);
-        document.getElementById(id).innerHTML= minDateString + " - " + minDate.toDateString();
-    }
-	function updateTextInput(range) {
-		  var val = document.getElementById("timeline_slider").value;
-       	  var svg = document.getElementById("map_current").contentDocument;
-       	  var svg_prev = document.getElementById("map_prev").contentDocument;
-       	  var svg_next = document.getElementById("map_next").contentDocument;
-       	  if (range == 3)
-       	  	document.getElementById("show_all_checkbox").checked=false;
-       	  var dict = new Set();
-		  var minDate = new Date("{{ minDate }}");
-		  val = parseInt(val)
-		  updateDate(minDate, "selectedDate_current", val);
-          updateMap(val, svg, range);
-          if(val>0){
-          	updateMap(val-range, svg_prev, range);
-          	updateDate(minDate, "selectedDate_prev", val-range);
-          }
-          else{
-          	updateMap(-1, svg_prev,0);
-          	document.getElementById("selectedDate_prev").innerHTML = "";
-          }
-
-          if (val < {{ dateRange }} && range != {{dateRange}}){
-          	updateMap(val+range, svg_next, range);
-          	updateDate(minDate, "selectedDate_next", val+range);
-          }
-          else{
-          	updateMap(-1, svg_next,0);
-          	document.getElementById("selectedDate_next").innerHTML = "";
-          }
-
-
-    }
-    window.onload = function(){
-    	updateTextInput({{ dateRange }});
-    }
-
-    function switchShowAll(){
-    	var chk=document.getElementById("show_all_checkbox").checked;
-    	if (chk){
-    		document.getElementById("timeline_slider").value = "0";
-    		updateTextInput({{dateRange}});
-    	}
-    	else {
-    		updateTextInput(3);
-    	}
-    }
-</script>
-
+{% block extra_head %}
+  	<link href="/static/css/map_visualization.css" rel="stylesheet">
+    <script src="/static/js/map_visualization.js"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				updateTimeInput({{ dateRange }}, {{ data|safe }}, {{dateRange}}, "{{minDate}}");
+			}
+		</script>
 {% endblock %}
 {% block content %}
     <div>
@@ -127,24 +27,24 @@ switchShowAll{% extends "base.html" %}
     	<div class='selectedDated_div' id='selectedDate_current'></div>
      	<div class='selectedDated_div' id='selectedDate_next'></div>
     </div>
-	<input type="range" id="timeline_slider" list="tickmarks" step="3" min="0" max={{ dateRange }} oninput="updateTextInput(3);" class="slider" value="0"/>
-	<input type="checkbox" id="show_all_checkbox" onchange="switchShowAll()" checked>
+	<input type="range" id="timeline_slider" list="tickmarks" step="3" min="0" max={{ dateRange }} oninput="updateTimeInput(3, {{ data|safe }}, {{dateRange}}, '{{minDate}}');" class="slider" value="0"/>
+	<input type="checkbox" id="show_all_checkbox" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}')" checked>
 	<label id="show_all_news_label"> Show All News </label>
 	<p>Topic Filter:</p>
 	<div>
-	  <input type="radio" id="death" name="topic_filter" value="0" onchange="switchShowAll();">
+	  <input type="radio" id="death" name="topic_filter" value="0" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
 	  <label for="death">Death</label>
 	</div>
 	<div>
-	  <input type="radio" id="property_loss" name="topic_filter" value="1" onchange="switchShowAll();">
+	  <input type="radio" id="property_loss" name="topic_filter" value="1" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
 	  <label for="property_loss">Propoerty Loss</label>
 	</div>
 	<div>
-	  <input type="radio" id="reconstruction" name="topic_filter" value="2" onchange="switchShowAll();">
+	  <input type="radio" id="reconstruction" name="topic_filter" value="2" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
 	  <label for="reconstruction">Reconstruction</label>
 	</div>
 	<div>
-	  <input type="radio" id="all_topic" name="topic_filter" value="3" checked onchange="switchShowAll();">
+	  <input type="radio" id="all_topic" name="topic_filter" value="3" checked onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, "{{minDate}}");"/>
 	  <label for="all_topic">Select All Topics</label>
 	</div>
 {% endblock %}
