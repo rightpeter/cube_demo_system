@@ -1,160 +1,111 @@
 {% load staticfiles %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>{% block title %}EventCube{% endblock %}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
-        <link href="{% static "css/main.css" %}" rel="stylesheet">
-        <link href="{% static "css/bootstrap-responsive.min.css" %}" rel="stylesheet">
-        {% block css %}
-        {% endblock %}
-        <!-- Le HTML5 shim, for IE6-8 support of HTML5 ele	ents -->
-        <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-        <!--<script src="http://code.jquery.com/jquery-latest.js"></script>-->
-        <!--script src="http://jasny.github.com/bootstrap/assets/js/jquery.js"></script-->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="{% static "js/bootstrap.min.js" %}"></script>
-        <script src="{% static "js/ajax_setup.js" %}"></script>
-        <script src="{% static "js/main.js" %}"></script>
-        {% block javascript %}
-        {% endblock %}
-    </head>
-    <body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--<link rel="icon" href="../../../../favicon.ico">-->
 
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <a class="brand" href="/home">EventCube</a>
-                    <div class="nav-collapse collapse">
-                        <!-- Start of the nav bar content -->
-                        <div class="nav-collapse">
-                        	<ul class="nav pull-left">
-                        		<li><a class="brand" href="#howtousemodal" data-toggle="modal">How to use EventCube?</a></li>
-                        	</ul>
+    <title>Album example for Bootstrap</title>
 
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "bootstrap-3.4.0-dist/css/bootstrap.min.css" %}" rel="stylesheet">
 
-                            <ul class="nav pull-right">
-                            	{% if 'user_info' not in request.session %}
-                                <li>
-                                    <a href="/user/register">Register</a>
-                                </li>
-                                {% endif %}
-                                <li class="divider-vertical"></li>
-                                <li id="login_dropdown" class="dropdown {{login_error}}">
-	                                {% if 'user_info' in request.session %}
-                        			<a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                        				{{request.session.user_info.0}}<strong class="caret"></strong>
-                    				</a>
-					                <ul class="dropdown-menu">
-					                  <li><a href="#">Profile</a></li>
-					                  <li><a href="#">Settings</a></li>
-					                  <li><a href="/dataset/upload">Upload Dataset</a></li>
-                                      <!-- <li><a href="http://127.0.0.1:8000">Upload Dataset</a></li> -->
-					                  <li class="divider"></li>
-					                  <li><a href="/user/logout">Log out</a></li>
-					                </ul>
-									{% else %}
-                                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">Log in<strong class="caret"></strong></a>
-                                    <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                                        <form action="/user/login" method="POST" accept-charset="UTF-8">
-                                            {% csrf_token %}
-                                            {{ login_form }}
-                                            <input type="submit" value="Log in" class="btn btn-primary" style="display:block">
-                                        </form>
-                                    </div>
-                                    {% endif %}
-                            	</li>
-                            </ul>
-                        </div>
-                    </div><!--/.nav-collapse -->
-                </div>
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/album.css" %}" rel="stylesheet">
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
+    <script src="{% static "js/popper.min.js" %}"></script>
+    <script src="{% static "bootstrap-3.4.0-dist/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/holder.min.js" %}"></script>
+    {% block extra_head %} {% endblock %}
+  </head>
+
+  <body>
+    <header>
+      <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-md-7 py-4">
+              <h4 class="text-white">About</h4>
+              <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
             </div>
+            <div class="col-sm-4 offset-md-1 py-4">
+              <h4 class="text-white">Contact</h4>
+              <ul class="list-unstyled">
+                <li><a href="#" class="text-white">Follow on Twitter</a></li>
+                <li><a href="#" class="text-white">Like on Facebook</a></li>
+                <li><a href="#" class="text-white">Email me</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div id="howtousemodal" class="modal fade hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_0" aria-hidden="true">
-			                  <div class="modal-header" style="max-width: 600px;">
-			                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-			                    <h3>How to use EventCube</h3>
-			                  </div>
-			                  <div class="modal-body" id="modal_body" style="max-height: 500px; max-width: 600px;">
-			                  <h4>How to use EventCube?</h4>
+      </div>
+      <!--<nav class="navbar navbar-default">-->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Cube Demo</a>
+          </div>
 
-<p>Please login using our default account: tfb890703/tfb890703. In the dataset page, we currently provide three datasets.</p>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/">Home<span class="sr-only">(current)</span></a></li>
+              <li><a href="#">Link</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cube<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/cube/upload">Upload</a></li>
+                  <li><a href="/cube/query">Query</a></li>
+                  <!--<li><a href="#">Something else here</a></li>-->
+                  <!--<li role="separator" class="divider"></li>-->
+                  <!--<li><a href="#">Separated link</a></li>-->
+                  <!--<li role="separator" class="divider"></li>-->
+                  <!--<li><a href="#">One more separated link</a></li>-->
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="#">Link</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </header>
 
-<ul>
-<li>* NEWS2010: Complete 2010 domestic news data from New York Time, Associated Press, Bloomberg.</li>
-<li>* SHORTNEWS: Shorter and less version of 2010 domestic news. Since "Analyze" function may takes some time, you can use this dataset to explore the idea of Topic Cube and n-gram analysis.</li>
-<li>* ASRSFINAL: Aviation Safety Reporting System Dataset, from 2001-2009.</li>
-</ul>
+    {% block content %} {% endblock content %}
 
-<p> search function should be very efficient, analysis part will be relatively slow if you select a large cube, i.e., about 40 seconds. For NEWS data, we suggest you to explore search function in "NEWS2010" and explore analysis function in "SHORTNEWS".</p>
-
-<p>If you wanna to upload more datasets, you can click the username, and select "Upload dataset". Later we will have a detailed instruction for you.</p>
-
-<p>Notice: PLEASE DO NOT CLICK "delete" (the dustbin button), it is a shared account. :)</p>
-
-<h4>How to use Search Function? Use NEWS2010 as an example:</h4>
-
-<ul>
-<li>Step 1: Click "Search" button of NEWS2010.</li>
-<li>Step 2: Type a topic/term, select a recommended term/topic in the search bar. E.g., "health care bill". Click "Add".</li>
-<li>Step 3: In Target Dimensions, mark all the options.</li>
-<li>Step 4: Click "Query", enjoy the multi-dimensional search result!</li>
-</ul>
-
-<p>We build term-network based on the corpus. Please choose the terms we recommended because of the indexing issue.</p>
-
-<p>Other options for you:</p>
-<ul>
-<li>* You can modify the query in the result page by clicking "Query Panel".</li>
-<li>* You can click the "blue terms" under the search bar to add similar terms/topics in the query. </li>
-<li>* Many other query options, you can explore by your self.
-	<ol>
-	<li>Example: type "earthquake" -> click "haiti earthquake" -> click "help haiti", mark all the target dimensions.</li>
-	<li>Example: In ASRSFINAL dataset, add "delay", mark "Year", "State", "Weather", "Light" as target dimensions. </li>
-	</ol>
-	</li>
-</ul>
-<p>The ASRS dataset is based on another term-network. However, the operations are similar.</p>
-
-
-<h4>How to use Analysis Function? Use SHORTNEWS as an example:</h4>
-
-<ul>
-<li>Step 1: Click "Analyze" button of SHORTNEWS.</li>
-<li>Step 2: Click "Query".</li>
-<li>Step 3: You can find the overall topic distribution for this dataset, along with the Keyword cloud, unigrams and multigrams. Each unigram/multigram is clickable. You can see the original documents for this gram.</li>
-<li>Step 4: Click the "Compare" button in the top, Choose another cell and click "Compare". For example, click State, choose "NY", click "Compare". </li>
-</ul>
-
-<p>Also many other options are allowed here, you can explore by yourself. Sometimes the analysis is a bit slow for NEWS2010 and ASRSFINAL, but should be less than 2mins. Please be patient.</p>
-
-
-			                  </div>
-			                </div>
-		{% block content_outer %}
-	        <div class="container-fluid row-fluid">
-	        <div class="span10 offset1">
-	        	{% for message in messages %}
-				<div class="alert alert-{{message.tags}}">
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					{{ message }}
-				</div>
-				{% endfor %}
-		    	{% block content %}
-		        {% endblock %}
-
-		        <footer>
-		            {% block footer %}
-		            {% endblock %}
-		        </footer>
-	        </div>
-	        </div><!--/.fluid-container-->
-        {% endblock %}
-    </body>
+    <footer class="text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Back to top</a>
+        </p>
+        <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+        <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p>
+      </div>
+    </footer>
+  </body>
 </html>
