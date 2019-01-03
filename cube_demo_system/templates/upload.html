@@ -8,23 +8,30 @@
 {% block content %}
     <div class="container">
       <div class="row">
-        <div class="control-group" id="fields">
-            <label class="control-label" for="field1">Nice Multiple Form Fields</label>
-            <div class="controls">
-                <form role="form" autocomplete="off">
-                    <div class="entry input-group col-xs-3">
-                        <input class="form-control" name="fields[]" type="text" placeholder="Type something" />
-                    	<span class="input-group-btn">
-                            <button class="btn btn-success btn-add" type="button">
-				<span class="fas fa-plus"></span>
-                            </button>
-                        </span>
-                    </div>
-                </form>
-            <br>
-            <small>Press <span class="fas fa-plus"></span> to add another form field :)</small>
-            </div>
-        </div>
+        <h2>Upload Cube</h2>
       </div>
+      <form class="form-horizontal" action="/cube/upload" method="POST" enctype="multipart/form-data">
+	<div class="form-group">
+	  <label class="control-label col-sm-2" for="cube_name">Cube Name:</label>
+	  <div class="col-sm-8">
+	    <input type="text" class="form-control" id="cube_name" placeholder="Cube Name" name="cube_name">
+	  </div>
+	</div>
+
+	<div class="form-group">
+	  <div class="col-sm-offset-2 col-sm-3">
+	    <label for="cubeDataFile">Choose cube.data file</label>
+	    <input type="file" class="form-control-file" id="id_data_file" name="data_file">
+	  </div>
+	</div>
+
+	{% csrf_token %}
+
+	<div class="form-group">
+	  <div class="col-sm-offset-2 col-sm-10">
+	    <button type="submit" class="btn btn-default">Upload</button>
+	  </div>
+	</div>
+      </form>
     </div>
 {% endblock %}
