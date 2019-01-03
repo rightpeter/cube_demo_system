@@ -1,0 +1,130 @@
+switchShowAll{% extends "base.html" %}
+{% load staticfiles %}
+{% block javascript %}
+<link rel="stylesheet" href="{% static "css/timeline.css" %}">
+<script>
+	FILL_COLORS=["0", "58", "118", "238"]
+  function getFilledColor(fillColor, percentage){
+    console.log(percentage)
+    return "hsl("+fillColor+", "+Math.min(100, (percentage*100).toFixed(2)+30)+"%, 80%)"
+  }
+	function updateMap(val, svg, range){
+		var topicIndex = parseInt(document.querySelector('input[name="topic_filter"]:checked').value);
+		var fillColor = FILL_COLORS[topicIndex];
+		var dict = new Set();
+		var i;
+          {% for i in data %}
+          		if( {{ i.time }} < val+range && {{ i.time }} >= val && "{{i.location}}".length && (topicIndex == 3 || {{ i.topics }}[topicIndex] > 0.3 ) ){
+                {% for location in i.location %}
+                  dict.add("{{location}}");
+                  if (topicIndex == 3 )
+                      svg.getElementById("{{location}}").setAttribute("fill", "hsl(238, 100%, 80%)");
+                  else
+      	  				     svg.getElementById("{{location}}").setAttribute("fill", getFilledColor(fillColor, {{ i.topics }}[topicIndex]));
+                {% endfor %}
+              } else{
+                // change the color back to default color
+                {% for location in i.location %}
+            			if (!dict.has("{{location}}") && "{{location}}" != "None"){
+            				svg.getElementById("{{location}}").setAttribute("fill", "#CCCCCC");
+            			}
+                {% endfor %}
+          		}
+
+          {% endfor %}
+    }
+    function updateDate(originDate, id, val){
+    	var minDate = new Date(originDate.toDateString())
+    	minDate.setDate(minDate.getDate() + val);
+    	var minDateString = minDate.toDateString()
+		minDate.setDate(minDate.getDate() + 2);
+        document.getElementById(id).innerHTML= minDateString + " - " + minDate.toDateString();
+    }
+	function updateTextInput(range) {
+		  var val = document.getElementById("timeline_slider").value;
+       	  var svg = document.getElementById("map_current").contentDocument;
+       	  var svg_prev = document.getElementById("map_prev").contentDocument;
+       	  var svg_next = document.getElementById("map_next").contentDocument;
+       	  if (range == 3)
+       	  	document.getElementById("show_all_checkbox").checked=false;
+       	  var dict = new Set();
+		  var minDate = new Date("{{ minDate }}");
+		  val = parseInt(val)
+		  updateDate(minDate, "selectedDate_current", val);
+          updateMap(val, svg, range);
+          if(val>0){
+          	updateMap(val-range, svg_prev, range);
+          	updateDate(minDate, "selectedDate_prev", val-range);
+          }
+          else{
+          	updateMap(-1, svg_prev,0);
+          	document.getElementById("selectedDate_prev").innerHTML = "";
+          }
+
+          if (val < {{ dateRange }} && range != {{dateRange}}){
+          	updateMap(val+range, svg_next, range);
+          	updateDate(minDate, "selectedDate_next", val+range);
+          }
+          else{
+          	updateMap(-1, svg_next,0);
+          	document.getElementById("selectedDate_next").innerHTML = "";
+          }
+
+
+    }
+    window.onload = function(){
+    	updateTextInput({{ dateRange }});
+    }
+
+    function switchShowAll(){
+    	var chk=document.getElementById("show_all_checkbox").checked;
+    	if (chk){
+    		document.getElementById("timeline_slider").value = "0";
+    		updateTextInput({{dateRange}});
+    	}
+    	else {
+    		updateTextInput(3);
+    	}
+    }
+</script>
+
+{% endblock %}
+{% block content %}
+    <div>
+     <div class="map_container">
+     	<object id="map_prev" class="my_map" data="/static/img/cal_map.svg" type="image/svg+xml"></object>
+
+     </div>
+     <div class="map_container">
+     	<object id="map_current" class="my_map" data="/static/img/cal_map.svg" type="image/svg+xml"></object>
+     </div>
+     <div class="map_container" id="map_container_next">
+     	<object id="map_next" class="my_map" data="/static/img/cal_map.svg" type="image/svg+xml"></object>
+     </div>
+    </div>
+    <div>
+    	<div class='selectedDated_div' id='selectedDate_prev'></div>
+    	<div class='selectedDated_div' id='selectedDate_current'></div>
+     	<div class='selectedDated_div' id='selectedDate_next'></div>
+    </div>
+	<input type="range" id="timeline_slider" list="tickmarks" step="3" min="0" max={{ dateRange }} oninput="updateTextInput(3);" class="slider" value="0"/>
+	<input type="checkbox" id="show_all_checkbox" onchange="switchShowAll()" checked>
+	<label id="show_all_news_label"> Show All News </label>
+	<p>Topic Filter:</p>
+	<div>
+	  <input type="radio" id="death" name="topic_filter" value="0" onchange="switchShowAll();">
+	  <label for="death">Death</label>
+	</div>
+	<div>
+	  <input type="radio" id="property_loss" name="topic_filter" value="1" onchange="switchShowAll();">
+	  <label for="property_loss">Propoerty Loss</label>
+	</div>
+	<div>
+	  <input type="radio" id="reconstruction" name="topic_filter" value="2" onchange="switchShowAll();">
+	  <label for="reconstruction">Reconstruction</label>
+	</div>
+	<div>
+	  <input type="radio" id="all_topic" name="topic_filter" value="3" checked onchange="switchShowAll();">
+	  <label for="all_topic">Select All Topics</label>
+	</div>
+{% endblock %}
