@@ -8,6 +8,12 @@ function getFilledColor(fillColor, percentage){
   return "hsl("+fillColor+", "+Math.min(100, (percentage*100).toFixed(2))+"%, 60%)"
 }
 
+function showModal(e) {
+	console.log(e.target.id);
+	$('#modal_title').html("County id: " + e.target.id)
+	$('#county_modal').modal('show');
+}
+
 function updateMap(val, svg, range, data){
   var topicIndex = parseInt(document.querySelector('input[name="topic_filter"]:checked').value);
   var fillColor = FILL_COLORS[topicIndex];
@@ -59,52 +65,52 @@ function updateMap(val, svg, range, data){
 
 
 function updateDate(originDate, id, val){
-    var minDate = new Date(originDate.toDateString())
-    minDate.setDate(minDate.getDate() + val);
-    var minDateString = minDate.toDateString()
-    minDate.setDate(minDate.getDate() + 2);
-    document.getElementById(id).innerHTML= minDateString + " - " + minDate.toDateString();
-  }
+  var minDate = new Date(originDate.toDateString())
+  minDate.setDate(minDate.getDate() + val);
+  var minDateString = minDate.toDateString()
+  minDate.setDate(minDate.getDate() + 2);
+  document.getElementById(id).innerHTML= minDateString + " - " + minDate.toDateString();
+}
 
 function updateTimeInput(range, data, dateRange, minDate) {
-      var val = document.getElementById("timeline_slider").value;
-      var svg = document.getElementById("map_current").contentDocument;
-      var svg_prev = document.getElementById("map_prev").contentDocument;
-      var svg_next = document.getElementById("map_next").contentDocument;
-      if (range == 3)
-        document.getElementById("show_all_checkbox").checked=false;
-      var dict = new Set();
-      var minDate = new Date(minDate);
-      val = parseInt(val)
-      updateDate(minDate, "selectedDate_current", val);
-      updateMap(val, svg, range, data);
-      if(val>0){
-        updateMap(val-range, svg_prev, range, data);
-        updateDate(minDate, "selectedDate_prev", val-range);
-      }
-      else{
-        updateMap(-1, svg_prev,0, data);
-        document.getElementById("selectedDate_prev").innerHTML = "";
-      }
-
-      if (val < dateRange && range != dateRange){
-        updateMap(val+range, svg_next, range, data);
-        updateDate(minDate, "selectedDate_next", val+range);
-      }
-      else{
-        updateMap(-1, svg_next,0, data);
-        document.getElementById("selectedDate_next").innerHTML = "";
-      }
-  }
-
-
-  function switchShowAll(data, dateRange, minDate){
-    var chk=document.getElementById("show_all_checkbox").checked;
-    if (chk){
-      document.getElementById("timeline_slider").value = "0";
-      updateTimeInput(dateRange, data, dateRange, minDate);
+    var val = document.getElementById("timeline_slider").value;
+    var svg = document.getElementById("map_current").contentDocument;
+    var svg_prev = document.getElementById("map_prev").contentDocument;
+    var svg_next = document.getElementById("map_next").contentDocument;
+    if (range == 3)
+      document.getElementById("show_all_checkbox").checked=false;
+    var dict = new Set();
+    var minDate = new Date(minDate);
+    val = parseInt(val)
+    updateDate(minDate, "selectedDate_current", val);
+    updateMap(val, svg, range, data);
+    if(val>0){
+      updateMap(val-range, svg_prev, range, data);
+      updateDate(minDate, "selectedDate_prev", val-range);
     }
-    else {
-      updateTimeInput(3, data, dateRange, minDate);
+    else{
+      updateMap(-1, svg_prev,0, data);
+      document.getElementById("selectedDate_prev").innerHTML = "";
     }
+
+    if (val < dateRange && range != dateRange){
+      updateMap(val+range, svg_next, range, data);
+      updateDate(minDate, "selectedDate_next", val+range);
+    }
+    else{
+      updateMap(-1, svg_next,0, data);
+      document.getElementById("selectedDate_next").innerHTML = "";
+    }
+}
+
+
+function switchShowAll(data, dateRange, minDate){
+  var chk=document.getElementById("show_all_checkbox").checked;
+  if (chk){
+    document.getElementById("timeline_slider").value = "0";
+    updateTimeInput(dateRange, data, dateRange, minDate);
   }
+  else {
+    updateTimeInput(3, data, dateRange, minDate);
+  }
+}

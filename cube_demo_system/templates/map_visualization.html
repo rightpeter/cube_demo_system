@@ -1,50 +1,90 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block extra_head %}
-  	<link href="/static/css/map_visualization.css" rel="stylesheet">
-    <script src="/static/js/map_visualization.js"></script>
+<link href="{% static "css/map_visualization.css" %}" rel="stylesheet">
+    <script src="{% static "js/map_visualization.js" %}"></script>
 		<script type="text/javascript">
 			window.onload = function(){
 				updateTimeInput({{ dateRange }}, {{ data|safe }}, {{dateRange}}, "{{minDate}}");
+
+				var svg = document.getElementById("map_current").contentDocument
+				var paths = svg.getElementsByTagName("path");
+				var polylines = svg.getElementsByTagName("polyline");
+
+				for (var i = 0; i < paths.length; i++) {
+    				    paths[i].addEventListener('click', showModal, false);
+				}
+
+				for (var i = 0; i < polylines.length; i++) {
+    				    polylines[i].addEventListener('click', showModal, false);
+				}
 			}
 		</script>
 {% endblock %}
+
 {% block content %}
   <div id="map_visualization_container">
      <div class="map_container">
-     	<object id="map_prev" class="my_map" data="/static/img/cal_map.svg" type="image/svg+xml"></object>
+	     <object id="map_prev" class="my_map" data="{% static "img/cal_map.svg"%}" type="image/svg+xml"></object>
 
      </div>
      <div class="map_container">
-     	<object id="map_current" class="my_map" data="/static/img/cal_map.svg" type="image/svg+xml"></object>
+	     <object id="map_current" class="my_map" data="{% static "img/cal_map.svg"%}" type="image/svg+xml"></object>
      </div>
      <div class="map_container" id="map_container_next">
-     	<object id="map_next" class="my_map" data="/static/img/cal_map.svg" type="image/svg+xml"></object>
+	     <object id="map_next" class="my_map" data="{% static "img/cal_map.svg" %}" type="image/svg+xml"></object>
      </div>
-  <div>
+     <div>
     	<div class='selectedDated_div' id='selectedDate_prev'></div>
     	<div class='selectedDated_div' id='selectedDate_current'></div>
      	<div class='selectedDated_div' id='selectedDate_next'></div>
-  </div>
-	<input type="range" id="timeline_slider" list="tickmarks" step="3" min="0" max={{ dateRange }} oninput="updateTimeInput(3, {{ data|safe }}, {{dateRange}}, '{{minDate}}');" class="slider" value="0"/>
-	<input type="checkbox" id="show_all_checkbox" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}')" checked>
-	<label id="show_all_news_label"> Show All News </label>
-	<p>Topic Filter:</p>
-	<div class="topic_filter_container">
-	  <input type="radio" id="death" name="topic_filter" value="0" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
-	  <label for="death">Death</label>
-	</div>
-	<div class="topic_filter_container">
-	  <input type="radio" id="property_loss" name="topic_filter" value="1" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
-	  <label for="property_loss">Propoerty Loss</label>
-	</div>
-	<div class="topic_filter_container">
-	  <input type="radio" id="reconstruction" name="topic_filter" value="2" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
-	  <label for="reconstruction">Reconstruction</label>
-	</div>
-	<div class="topic_filter_container">
-	  <input type="radio" id="all_topic" name="topic_filter" value="3" checked onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
-	  <label for="all_topic">Select All Topics</label>
-	</div>
+      </div>
+      <input type="range" id="timeline_slider" list="tickmarks" step="3" min="0" max={{ dateRange }} oninput="updateTimeInput(3, {{ data|safe }}, {{dateRange}}, '{{minDate}}');" class="slider" value="0"/>
+      <input type="checkbox" id="show_all_checkbox" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}')" checked>
+      <label id="show_all_news_label"> Show All News </label>
+      <p>Topic Filter:</p>
+      <div class="topic_filter_container">
+        <input type="radio" id="death" name="topic_filter" value="0" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <label for="death">Death</label>
+      </div>
+      <div class="topic_filter_container">
+        <input type="radio" id="property_loss" name="topic_filter" value="1" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <label for="property_loss">Propoerty Loss</label>
+      </div>
+      <div class="topic_filter_container">
+        <input type="radio" id="reconstruction" name="topic_filter" value="2" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <label for="reconstruction">Reconstruction</label>
+      </div>
+      <div class="topic_filter_container">
+        <input type="radio" id="all_topic" name="topic_filter" value="3" checked onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <label for="all_topic">Select All Topics</label>
+      </div>
+      <div id="county_modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 id="modal_title" class="modal-title">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+	      <div class="container">
+		<div class="row">
+		  <div class="col-sm-4">
+              	    <p>Description of news goes here.</p>
+		  </div>
+		  <div class="col-sm-4">
+			  <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
+		  </div>
+		</div>
+	      </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
  </div>
 {% endblock %}
