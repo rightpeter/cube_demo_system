@@ -18,6 +18,16 @@
 				for (var i = 0; i < polylines.length; i++) {
     				    polylines[i].addEventListener('click', showModal, false);
 				}
+
+				var scrolling = setInterval(changeTopic, 1000);
+
+				function changeTopic() {
+  				    var topicIndex = parseInt(document.querySelector('input[name="topic_filter"]:checked').value);
+				    var newTopicIndex = (topicIndex + 1) % 4;
+
+				    document.getElementsByName("topic_filter")[newTopicIndex].checked = true
+				    document.getElementsByName("topic_filter")[newTopicIndex].onchange()
+				}
 			}
 		</script>
 {% endblock %}
@@ -44,19 +54,19 @@
       <label id="show_all_news_label"> Show All News </label>
       <p>Topic Filter:</p>
       <div class="topic_filter_container">
-        <input type="radio" id="death" name="topic_filter" value="0" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <input type="radio" id="death" name="topic_filter" value="0" checked="false" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
         <label for="death">Death</label>
       </div>
       <div class="topic_filter_container">
-        <input type="radio" id="property_loss" name="topic_filter" value="1" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <input type="radio" id="property_loss" name="topic_filter" value="1" checked="false" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
         <label for="property_loss">Propoerty Loss</label>
       </div>
       <div class="topic_filter_container">
-        <input type="radio" id="reconstruction" name="topic_filter" value="2" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <input type="radio" id="reconstruction" name="topic_filter" value="2" checked="false" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
         <label for="reconstruction">Reconstruction</label>
       </div>
       <div class="topic_filter_container">
-        <input type="radio" id="all_topic" name="topic_filter" value="3" checked onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <input type="radio" id="all_topic" name="topic_filter" value="3" checked="true" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
         <label for="all_topic">Select All Topics</label>
       </div>
       <div id="county_modal" class="modal" tabindex="-1" role="dialog">
