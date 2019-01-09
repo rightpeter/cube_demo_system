@@ -13,12 +13,7 @@ class UploadView(TemplateView):
         return render(request, 'upload.html', context=None)
 
     def post(self, request, **kwargs):
-        print(request.POST)
-        print("files len: ", len(request.FILES))
-        print(request.FILES['data_file'])
-
         file_data = request.FILES['data_file'].read().decode("utf-8")
-        print(file_data)
         lines = file_data.split('\n')
         for line in lines[:-1]:
             content = line.split('\t')
