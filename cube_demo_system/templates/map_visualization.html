@@ -19,7 +19,7 @@
     				    polylines[i].addEventListener('click', showModal, false);
 				}
 
-				var scrolling = setInterval(changeTopic, 1000);
+				var scrolling = setInterval(changeTopic, 2000);
 
 				function changeTopic() {
   				    var topicIndex = parseInt(document.querySelector('input[name="topic_filter"]:checked').value);
@@ -75,20 +75,36 @@
             <div class="modal-header">
               <h5 id="modal_title" class="modal-title">Modal title</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-	      <div class="container">
-		<div class="row">
+	        <div class="container">
 		  <div class="col-sm-4">
-              	    <p>Description of news goes here.</p>
+		    <div class="row form-group">
+	              <span class="label label-primary">Phrase1</span>
+	              <span class="label label-primary">Phrase2</span>
+	              <span class="label label-primary">Phrase3</span>
+	              <span class="label label-primary">Phrase4</span>
+	              <span class="label label-primary">Phrase5</span>
+	              <span class="label label-primary">Phrase6</span>
+		    </div>
+		    <div class="row form-group">
+                      <p>Top sentence1 goes here.</p>
+		    </div>
+		    <div class="row form-group">
+                      <p>Top sentence2 goes here.</p>
+		    </div>
+		    <div class="row form-group">
+                      <p>Top sentence3 goes here.</p>
+		    </div>
+		    <div class="row form-group">
+                      <p>Top sentence4 goes here.</p>
+		    </div>
 		  </div>
-		  <div class="col-sm-4">
-			  <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
-		  </div>
-		</div>
-	      </div>
+	          <div class="col-sm-4">
+	            <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
+	          </div>
+	        </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

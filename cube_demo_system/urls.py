@@ -20,7 +20,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('visualize/', include('visualization.urls')),
+    path('visualization/', include('visualization.urls')),
     path('cube/', include('cube.urls')),
     path('', views.HomePageView.as_view()),
 ]
