@@ -1,4 +1,4 @@
-FILL_COLORS=["0", "58", "118", "238"]
+FILL_COLORS=["0", "118", "58", "238"]
 data = []
 dateRange = 0
 minDate = ""
