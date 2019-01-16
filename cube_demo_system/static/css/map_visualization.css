@@ -57,6 +57,7 @@ label {
 
 #map_current{
 	width: 175%;
+  z-index: 3;
 }
 
 #map_container_next{
@@ -78,4 +79,21 @@ label {
 .topic_filter_container{
   display: inline-block;
   margin-right: 2%;
+}
+
+ul{
+  list-style-type: none;
+  display: flex;
+  padding: 0;
+}
+
+.key-phrase-li{
+  margin:auto;
+  text-align: center;
+  font-size: 2.5ex;
+}
+
+div.form-group{
+  width: 70%;
+  margin-left:2%;
 }

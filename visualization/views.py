@@ -78,21 +78,19 @@ class MapView(TemplateView):
             data = json.load(f)
 
         raw = list(map(lambda news: {'time': news[1], 'id': news[0].split('/')[-1], 'location': getSVGPath(news[4].keys()), 'topics': news[6]}, data))
-        #     raw = [{'time':'2018.11.10', id:'1', 'location':'_x30_07_Butte', 'topics':[0,0,1]},
-        #            {'time':'2018.11.11', id:'2', 'location':'_x31_03_Tehama', 'topics':[0,1,0]},
-        #            {'time':'2018.11.12', id:'3', 'location':'_x30_07_Butte', 'topics':[1,0,0]},
-        #            {'time':'2018.11.11', id:'4', 'location':'_x31_03_Tehama', 'topics':[1,0,0]},
-        #            {'time':'2018.11.13', id:'5', 'location':'_x30_07_Butte', 'topics':[0,1,0]},
-        #            {'time':'2018.11.17', id:'6', 'location':'_x31_03_Tehama', 'topics':[0,1,0]},
-        #            ]
         for i in raw:
             i['time'] = datetime.strptime(i['time'], "%Y.%m.%d")
         minDate = min(raw, key=lambda x: x['time'])['time']
         for i in raw:
             i['time'] = (i['time'] - minDate).days
         maxDate = max(raw, key=lambda x: x['time'])['time']
+
+        with open('cube_demo_system/static/json/cell_key_sentence.json') as keySentenceFile:
+            summary = json.load(keySentenceFile)
+
         return render_to_response('map_visualization.html', {
             'minDate': minDate.strftime('%B %d, %Y'),
             'dateRange': maxDate,
-            'data': raw
+            'data': raw,
+            'summary': summary
         })
