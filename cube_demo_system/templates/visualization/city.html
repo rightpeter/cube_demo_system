@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static "leaflet/leaflet.css"%}"/>
+<link rel="stylesheet" href="{% static "css/visualization/city.css" %}">
+<script src="{% static "leaflet/leaflet.js"%}"></script>
+<script src="{% static "js/visualization/city.js" %}"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    L.geoJson({{ butte|safe }}, {style: {
+      color: 'grey'
+    }}).addTo(map);
+    cityGeoJson = L.geoJson({{ butte_city|safe }}, {
+      style: style,
+      onEachFeature: onEachFeature
+    }).addTo(map);
+
+    info = L.control();
+
+    info.onAdd = function (map) {
+      this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+      this.update();
+      return this._div;
+    };
+
+    // method that we will use to update the control based on feature properties passed
+    info.update = function (props) {
+      this._div.innerHTML = '<h4>Details of City: ' + (props ?
+        props.cityName
+        : '') + '</h4>' +  (props ?
+        '<b> Some detail information comes here! </b><br />'
+	: '<b> Hover over a state </b>');
+    };
+
+    info.addTo(map);
+  })
+</script>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div id="id-city-map"></div>
+
+    <div id="city_modal" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="modal_title" class="modal-title">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="container">
+      	  <div class="col-sm-4">
+      	    <div class="row form-group">
+                    <span class="label label-primary">Phrase1</span>
+                    <span class="label label-primary">Phrase2</span>
+                    <span class="label label-primary">Phrase3</span>
+                    <span class="label label-primary">Phrase4</span>
+                    <span class="label label-primary">Phrase5</span>
+                    <span class="label label-primary">Phrase6</span>
+      	    </div>
+      	    <div class="row form-group">
+                    <p>Top sentence1 goes here.</p>
+      	    </div>
+      	    <div class="row form-group">
+                    <p>Top sentence2 goes here.</p>
+      	    </div>
+      	    <div class="row form-group">
+                    <p>Top sentence3 goes here.</p>
+      	    </div>
+      	    <div class="row form-group">
+                    <p>Top sentence4 goes here.</p>
+      	    </div>
+      	  </div>
+                <div class="col-sm-4">
+                  <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

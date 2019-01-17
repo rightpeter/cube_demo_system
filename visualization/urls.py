@@ -3,5 +3,6 @@ from visualization import views
 
 
 urlpatterns = [
-    url('map', views.MapView.as_view()),
+    url('county', views.CountyView.as_view()),
+    url('city', views.CityView.as_view()),
 ]
