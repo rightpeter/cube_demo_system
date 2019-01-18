@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block extra_head %}
-<link href="{% static "css/map_visualization.css" %}" rel="stylesheet">
-    <script src="{% static "js/map_visualization.js" %}"></script>
+<link href="{% static "css/visualization/county.css" %}" rel="stylesheet">
+    <script src="{% static "js/visualization/county.js" %}"></script>
 		<script type="text/javascript">
       var scrolling = null;
       function mapOnClick(e){
@@ -24,18 +24,16 @@
 			window.onload = function(){
 				updateTimeInput({{ dateRange }}, {{ data|safe }}, {{dateRange}}, "{{minDate}}");
 
-				var svg = document.getElementById("map_current").contentDocument
-				var paths = svg.getElementsByTagName("path");
-				var polylines = svg.getElementsByTagName("polyline");
+		var svg = document.getElementById("map_current").contentDocument
+		var paths = svg.getElementsByTagName("path");
+		var polylines = svg.getElementsByTagName("polyline");
 
 				for (var i = 0; i < paths.length; i++) {
     				    paths[i].addEventListener('click',mapOnClick , false);
 				}
 
 				for (var i = 0; i < polylines.length; i++) {
-    				    polylines[i].addEventListener('click',mapOnClick, function() {
-                  showModal()
-                }, false);
+    				    polylines[i].addEventListener('click',mapOnClick, false);
 				}
 
 			}
