@@ -111,6 +111,9 @@ class CityView(TemplateView):
         with open('cube_demo_system/static/geo/butte-city.geojson') as f:
             butte_city = json.load(f)
 
+        with open('cube_demo_system/static/json/cell_key_sentence.json') as keySentenceFile:
+            summary = json.load(keySentenceFile)
+
         return render_to_response(
             'visualization/city.html', {
                 'topic': topic,
@@ -118,4 +121,5 @@ class CityView(TemplateView):
                 'date_period': date_period,
                 'butte': butte,
                 'butte_city': butte_city,
+                'summary': summary
             })

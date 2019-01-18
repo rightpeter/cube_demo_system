@@ -6,6 +6,11 @@
 <script src="{% static "leaflet/leaflet.js"%}"></script>
 <script src="{% static "js/visualization/city.js" %}"></script>
 <script type="text/javascript">
+  var topic = {{ topic }}
+  var county = "{{ county }}"
+  var time = "{{ date_period }}"
+  var keyPhrases = {{ summary|safe }}
+
   $(document).ready(function(){
     L.geoJson({{ butte|safe }}, {style: {
       color: 'grey'
@@ -39,9 +44,6 @@
 
 {% block content %}
   <div class="container">
-    <p>{{ topic }}</p>
-    <p>{{ county }}</p>
-    <p>{{ date_period }}</p>
     <div id="id-city-map"></div>
 
     <div id="city_modal" class="modal" tabindex="-1" role="dialog">
@@ -53,33 +55,16 @@
             </button>
           </div>
           <div class="modal-body">
-              <div class="container">
-      	  <div class="col-sm-4">
-      	    <div class="row form-group">
-                    <span class="label label-primary">Phrase1</span>
-                    <span class="label label-primary">Phrase2</span>
-                    <span class="label label-primary">Phrase3</span>
-                    <span class="label label-primary">Phrase4</span>
-                    <span class="label label-primary">Phrase5</span>
-                    <span class="label label-primary">Phrase6</span>
-      	    </div>
-      	    <div class="row form-group">
-                    <p>Top sentence1 goes here.</p>
-      	    </div>
-      	    <div class="row form-group">
-                    <p>Top sentence2 goes here.</p>
-      	    </div>
-      	    <div class="row form-group">
-                    <p>Top sentence3 goes here.</p>
-      	    </div>
-      	    <div class="row form-group">
-                    <p>Top sentence4 goes here.</p>
-      	    </div>
-      	  </div>
-                <div class="col-sm-4">
-                  <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
-                </div>
-              </div>
+                   <div class="container">
+      	               <div id="summary-content">
+                          <div class="row form-group">
+                      <ul class="form-group" id="key-phrases-list"></ul>
+                    </div>
+      	                </div>
+                  <div>
+                    <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
+                  </div>
+                    </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
