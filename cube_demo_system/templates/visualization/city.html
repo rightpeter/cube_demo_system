@@ -9,7 +9,7 @@
   var topic = {{ topic }}
   var county = "{{ county }}"
   var time = "{{ date_period }}"
-  var keyPhrases = {{ summary|safe }}
+  var images = {{ image|safe }}
 
   $(document).ready(function(){
     L.geoJson({{ butte|safe }}, {style: {
@@ -62,7 +62,7 @@
                     </div>
       	                </div>
                   <div>
-                    <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
+                    <img id="fire_image" src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
                   </div>
                     </div>
           </div>

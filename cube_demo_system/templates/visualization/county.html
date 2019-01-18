@@ -8,6 +8,7 @@
       var county = null;
       var topic = null;
       var time = null;
+      var images = {{ image|safe }}
       function mapOnClick(e){
         topic = document.querySelector('input[name="topic_filter"]:checked').value
         if( !$('#show_all_checkbox').checked && topic<3){
@@ -18,7 +19,7 @@
           val = parseInt(val)
           minDate.setDate(minDate.getDate() + val);
           var minDateString = minDate.getMonth()+1+ "." +minDate.getDate()
-          minDate.setDate(minDate.getDate() + 7 -1);
+          minDate.setDate(minDate.getDate() + 6);
           time= minDateString + "-" + (minDate.getMonth()+1)+ "." +minDate.getDate();
           county = location
           showModal({{ summary|safe }}, location,topic, time)
@@ -28,17 +29,17 @@
 			window.onload = function(){
 				updateTimeInput({{ dateRange }}, {{ data|safe }}, {{dateRange}}, "{{minDate}}");
 
-		var svg = document.getElementById("map_current").contentDocument
-		var paths = svg.getElementsByTagName("path");
-		var polylines = svg.getElementsByTagName("polyline");
+    		var svg = document.getElementById("map_current").contentDocument
+    		var paths = svg.getElementsByTagName("path");
+    		var polylines = svg.getElementsByTagName("polyline");
 
-				for (var i = 0; i < paths.length; i++) {
-    				    paths[i].addEventListener('click',mapOnClick , false);
-				}
+    				for (var i = 0; i < paths.length; i++) {
+        				    paths[i].addEventListener('click',mapOnClick , false);
+    				}
 
-				for (var i = 0; i < polylines.length; i++) {
-    				    polylines[i].addEventListener('click',mapOnClick, false);
-				}
+    				for (var i = 0; i < polylines.length; i++) {
+        				    polylines[i].addEventListener('click',mapOnClick, false);
+    				}
 
 			}
 
@@ -81,7 +82,7 @@
     	<div class='selectedDated_div' id='selectedDate_current'></div>
      	<div class='selectedDated_div' id='selectedDate_next'></div>
       </div>
-      <input type="range" id="timeline_slider" list="tickmarks" step="{{ unitDateRange }}" min="0" max={{ dateRange }} oninput="updateTimeInput(3, {{ data|safe }}, {{dateRange}}, '{{minDate}}');" class="slider" value="0"/>
+      <input type="range" id="timeline_slider" list="tickmarks" step="7" min="0" max={{ dateRange }} oninput="updateTimeInput(7, {{ data|safe }}, {{dateRange}}, '{{minDate}}');" class="slider" value="0"/>
       <input type="checkbox" id="show_all_checkbox" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}')" checked>
       <label id="show_all_news_label"> Show All News </label>
       <p>Topic Filter:</p>
@@ -118,7 +119,7 @@
                       </div>
 		                </div>
                     <div>
-                      <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
+                      <img id="fire_image" src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
                     </div>
 	              </div>
             </div>

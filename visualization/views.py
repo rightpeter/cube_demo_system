@@ -89,12 +89,16 @@ class CountyView(TemplateView):
         with open('cube_demo_system/static/json/cell_key_sentence.json') as keySentenceFile:
             summary = json.load(keySentenceFile)
 
+        with open('cube_demo_system/static/json/image_county.json') as imageFile:
+            image = json.load(imageFile)
+
         return render_to_response(
             'visualization/county.html', {
                 'minDate': minDate.strftime('%B %d, %Y'),
                 'dateRange': maxDate,
                 'data': raw,
-                'summary': summary
+                'summary': summary,
+                'image': image
             })
 
 
@@ -114,6 +118,9 @@ class CityView(TemplateView):
         with open('cube_demo_system/static/json/cell_key_sentence_city.json') as keySentenceFile:
             summary = json.load(keySentenceFile)
 
+        with open('cube_demo_system/static/json/image_city.json') as imageFile:
+            image = json.load(imageFile)
+
         return render_to_response(
             'visualization/city.html', {
                 'topic': topic,
@@ -121,5 +128,6 @@ class CityView(TemplateView):
                 'date_period': date_period,
                 'butte': butte,
                 'butte_city': butte_city,
-                'summary': summary
+                'summary': summary,
+                'image': image
             })

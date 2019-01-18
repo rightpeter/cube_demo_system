@@ -1,9 +1,5 @@
 var FILL_COLORS=["0", "118", "58", "238"]
 var TOPICS=['Death & Injury', 'Reconstruction', 'Property Loss']
-var data = []
-var dateRange = 0
-var minDate = ""
-
 
 function getFilledColor(fillColor, percentage){
   return "hsl("+fillColor+", "+Math.min(100, (percentage*100).toFixed(2))+"%, 60%)"
@@ -13,6 +9,9 @@ function showModal(keyPhrases, location, topic, time) {
   var cellId = [topic, location, time].join('_')
 	$('#modal_title').html("County: " + location + ",  Topic: " + TOPICS[parseInt(topic)] +", Date: "+time);
   $('#summary-content').html('<div class="row form-group"> <ul class="form-group" id="key-phrases-list"></ul></div>');
+  console.log($('#fire_image').attr('src'))
+  if (images[topic][location])
+    $('#fire_image').attr('src', "/static/" + images[topic][location][time]);
   var keyPhrase;
   if (keyPhrases[cellId]){
     var keys =Object.keys(keyPhrases[cellId])
