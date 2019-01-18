@@ -1,16 +1,29 @@
-FILL_COLORS=["0", "58", "118", "238"]
-data = []
-dateRange = 0
-minDate = ""
+var FILL_COLORS=["0", "118", "58", "238"]
+var TOPICS=['Death & Injury', 'Reconstruction', 'Property Loss']
+var data = []
+var dateRange = 0
+var minDate = ""
 
 
 function getFilledColor(fillColor, percentage){
   return "hsl("+fillColor+", "+Math.min(100, (percentage*100).toFixed(2))+"%, 60%)"
 }
 
-function showModal(e) {
-	console.log(e.target.id);
-	$('#modal_title').html("County id: " + e.target.id)
+function showModal(keyPhrases, location, topic, time) {
+  var cellId = [topic, location, time].join('_')
+	$('#modal_title').html("County: " + location + ",  Topic: " + TOPICS[parseInt(topic)] +", Date: "+time);
+  $('#summary-content').html('<div class="row form-group"> <ul class="form-group" id="key-phrases-list"></ul></div>');
+  var keyPhrase;
+  if (keyPhrases[cellId]){
+    var keys =Object.keys(keyPhrases[cellId])
+    for (keyPhrase in keys){
+      console.log(keyPhrase)
+      var $keyPhrase = $('<li class="key-phrase-li"> <span class="label label-primary">'+ keys[keyPhrase]+' </span></li>')
+      $('#key-phrases-list').append($keyPhrase)
+      var $keySentence = $('<div class="row form-group"><p>' + keyPhrases[cellId][keys[keyPhrase]]+ '</p></div>')
+      $('#summary-content').append($keySentence)
+    }
+  }
 	$('#county_modal').modal('show');
 }
 
@@ -64,11 +77,11 @@ function updateMap(val, svg, range, data){
 }
 
 
-function updateDate(originDate, id, val){
+function updateDate(originDate, id, val, range=2){
   var minDate = new Date(originDate.toDateString())
   minDate.setDate(minDate.getDate() + val);
   var minDateString = minDate.toDateString()
-  minDate.setDate(minDate.getDate() + 2);
+  minDate.setDate(minDate.getDate() + range);
   document.getElementById(id).innerHTML= minDateString + " - " + minDate.toDateString();
 }
 
@@ -82,7 +95,7 @@ function updateTimeInput(range, data, dateRange, minDate) {
     var dict = new Set();
     var minDate = new Date(minDate);
     val = parseInt(val)
-    updateDate(minDate, "selectedDate_current", val);
+    updateDate(minDate, "selectedDate_current", val, range-1);
     updateMap(val, svg, range, data);
     if(val>0){
       updateMap(val-range, svg_prev, range, data);

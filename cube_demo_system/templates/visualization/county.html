@@ -2,41 +2,66 @@
 {% load staticfiles %}
 {% block extra_head %}
 <link href="{% static "css/visualization/county.css" %}" rel="stylesheet">
-<script src="{% static "js/visualization/county.js" %}"></script>
-<script type="text/javascript">
-	window.onload = function(){
-		updateTimeInput({{ dateRange }}, {{ data|safe }}, {{dateRange}}, "{{minDate}}");
+    <script src="{% static "js/visualization/county.js" %}"></script>
+		<script type="text/javascript">
+      var scrolling = null;
+      function mapOnClick(e){
+        var topic = document.querySelector('input[name="topic_filter"]:checked').value
+        if( !$('#show_all_checkbox').checked && topic<3){
+          var location = e.target.id.split('_')
+          location = location.slice(3, location.length).join(' ')
+          var val = $("#timeline_slider").val();
+          var minDate = new Date("{{minDate}}");
+          val = parseInt(val)
+          minDate.setDate(minDate.getDate() + val);
+          var minDateString = minDate.getMonth()+1+ "." +minDate.getDate()
+          minDate.setDate(minDate.getDate() + 2);
+          var time= minDateString + "-" + (minDate.getMonth()+1)+ "." +minDate.getDate();
+          showModal({{ summary|safe }}, location,topic, time)
+        }
+      }
+
+			window.onload = function(){
+				updateTimeInput({{ dateRange }}, {{ data|safe }}, {{dateRange}}, "{{minDate}}");
 
 		var svg = document.getElementById("map_current").contentDocument
 		var paths = svg.getElementsByTagName("path");
 		var polylines = svg.getElementsByTagName("polyline");
 
-		for (var i = 0; i < paths.length; i++) {
-		    paths[i].addEventListener('click', showModal, false);
-		}
+				for (var i = 0; i < paths.length; i++) {
+    				    paths[i].addEventListener('click',mapOnClick , false);
+				}
 
-		for (var i = 0; i < polylines.length; i++) {
-		    polylines[i].addEventListener('click', showModal, false);
-		}
+				for (var i = 0; i < polylines.length; i++) {
+    				    polylines[i].addEventListener('click',mapOnClick, false);
+				}
 
-		var scrolling = setInterval(changeTopic, 2000);
+			}
 
-		function changeTopic() {
-		    var topicIndex = parseInt(document.querySelector('input[name="topic_filter"]:checked').value);
-		    var newTopicIndex = (topicIndex + 1) % 4;
+      function changeTopic() {
+          var topicIndex = parseInt(document.querySelector('input[name="topic_filter"]:checked').value);
+          console.log(topicIndex)
+          var newTopicIndex = (topicIndex + 1) % 4;
+          document.getElementsByName("topic_filter")[newTopicIndex].checked = true
+          document.getElementsByName("topic_filter")[newTopicIndex].onchange()
+      }
 
-		    document.getElementsByName("topic_filter")[newTopicIndex].checked = true
-		    document.getElementsByName("topic_filter")[newTopicIndex].onchange()
-		}
-	}
-</script>
+      function animationOnPlay(){
+          var text = ['Start Animation', 'Stop Animation']
+          $('#animation_btn').val(1-$('#animation_btn').val())
+          var isPlaying= $('#animation_btn').val()
+          console.log(isPlaying)
+          $('#animation_btn').html(text[isPlaying])
+          if(isPlaying=="1") scrolling = setInterval(changeTopic, 2000)
+          else clearInterval(scrolling);
+      }
+		</script>
 {% endblock %}
 
 {% block content %}
   <div id="map_visualization_container">
      <div class="map_container">
 	     <object id="map_prev" class="my_map" data="{% static "img/cal_map.svg"%}" type="image/svg+xml"></object>
-
      </div>
      <div class="map_container">
 	     <object id="map_current" class="my_map" data="{% static "img/cal_map.svg"%}" type="image/svg+xml"></object>
@@ -58,17 +83,18 @@
         <label for="death">Death</label>
       </div>
       <div class="topic_filter_container">
-        <input type="radio" id="property_loss" name="topic_filter" value="1" checked="false" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
-        <label for="property_loss">Propoerty Loss</label>
+        <input type="radio" id="reconstruction" name="topic_filter" value="1" checked="false" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <label for="reconstruction">Reconstruction</label>
       </div>
       <div class="topic_filter_container">
-        <input type="radio" id="reconstruction" name="topic_filter" value="2" checked="false" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
-        <label for="reconstruction">Reconstruction</label>
+        <input type="radio" id="property_loss" name="topic_filter" value="2" checked="false" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <label for="property_loss">Propoerty Loss</label>
       </div>
       <div class="topic_filter_container">
         <input type="radio" id="all_topic" name="topic_filter" value="3" checked="true" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
         <label for="all_topic">Select All Topics</label>
       </div>
+      <button id="animation_btn" onclick="animationOnPlay()" value="0"> Start Animation </button>
       <div id="county_modal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
@@ -78,33 +104,16 @@
               </button>
             </div>
             <div class="modal-body">
-	        <div class="container">
-		  <div class="col-sm-4">
-		    <div class="row form-group">
-	              <span class="label label-primary">Phrase1</span>
-	              <span class="label label-primary">Phrase2</span>
-	              <span class="label label-primary">Phrase3</span>
-	              <span class="label label-primary">Phrase4</span>
-	              <span class="label label-primary">Phrase5</span>
-	              <span class="label label-primary">Phrase6</span>
-		    </div>
-		    <div class="row form-group">
-                      <p>Top sentence1 goes here.</p>
-		    </div>
-		    <div class="row form-group">
-                      <p>Top sentence2 goes here.</p>
-		    </div>
-		    <div class="row form-group">
-                      <p>Top sentence3 goes here.</p>
-		    </div>
-		    <div class="row form-group">
-                      <p>Top sentence4 goes here.</p>
-		    </div>
-		  </div>
-	          <div class="col-sm-4">
-	            <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
-	          </div>
-	        </div>
+	             <div class="container">
+		               <div id="summary-content">
+	                    <div class="row form-group">
+                        <ul class="form-group" id="key-phrases-list"></ul>
+                      </div>
+		                </div>
+                    <div>
+                      <img src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
+                    </div>
+	              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
