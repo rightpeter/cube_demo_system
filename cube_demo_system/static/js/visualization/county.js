@@ -77,7 +77,7 @@ function updateMap(val, svg, range, data){
 }
 
 
-function updateDate(originDate, id, val, range=2){
+function updateDate(originDate, id, val, range=6){
   var minDate = new Date(originDate.toDateString())
   minDate.setDate(minDate.getDate() + val);
   var minDateString = minDate.toDateString()
@@ -90,7 +90,7 @@ function updateTimeInput(range, data, dateRange, minDate) {
     var svg = document.getElementById("map_current").contentDocument;
     var svg_prev = document.getElementById("map_prev").contentDocument;
     var svg_next = document.getElementById("map_next").contentDocument;
-    if (range == 3)
+    if (range == 7)
       document.getElementById("show_all_checkbox").checked=false;
     var dict = new Set();
     var minDate = new Date(minDate);
@@ -124,6 +124,6 @@ function switchShowAll(data, dateRange, minDate){
     updateTimeInput(dateRange, data, dateRange, minDate);
   }
   else {
-    updateTimeInput(3, data, dateRange, minDate);
+    updateTimeInput(7, data, dateRange, minDate);
   }
 }
