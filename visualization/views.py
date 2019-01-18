@@ -89,25 +89,33 @@ class CountyView(TemplateView):
         with open('cube_demo_system/static/json/cell_key_sentence.json') as keySentenceFile:
             summary = json.load(keySentenceFile)
 
-        return render_to_response('visualization/county.html', {
-            'minDate': minDate.strftime('%B %d, %Y'),
-            'dateRange': maxDate,
-            'data': raw,
-            'summary': summary
-        })
-
+        return render_to_response(
+            'visualization/county.html', {
+                'minDate': minDate.strftime('%B %d, %Y'),
+                'dateRange': maxDate,
+                'data': raw,
+                'summary': summary
+            })
 
 
 class CityView(TemplateView):
 
     def get(self, request, **kwargs):
+        topic = request.GET.get('topic')
+        county = request.GET.get('county')
+        date_period = request.GET.get('date_period')
+
         with open('cube_demo_system/static/geo/butte.geojson') as f:
             butte = json.load(f)
 
         with open('cube_demo_system/static/geo/butte-city.geojson') as f:
             butte_city = json.load(f)
 
-        return render_to_response('visualization/city.html', {
-            'butte': butte,
-            'butte_city': butte_city,
-        })
+        return render_to_response(
+            'visualization/city.html', {
+                'topic': topic,
+                'county': county,
+                'date_period': date_period,
+                'butte': butte,
+                'butte_city': butte_city,
+            })
