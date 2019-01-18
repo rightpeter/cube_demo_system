@@ -9,14 +9,12 @@ function showModal(keyPhrases, location, topic, time) {
   var cellId = [topic, location, time].join('_')
 	$('#modal_title').html("County: " + location + ",  Topic: " + TOPICS[parseInt(topic)] +", Date: "+time);
   $('#summary-content').html('<div class="row form-group"> <ul class="form-group" id="key-phrases-list"></ul></div>');
-  console.log($('#fire_image').attr('src'))
   if (images[topic][location])
     $('#fire_image').attr('src', "/static/" + images[topic][location][time]);
   var keyPhrase;
   if (keyPhrases[cellId]){
     var keys =Object.keys(keyPhrases[cellId])
     for (keyPhrase in keys){
-      console.log(keyPhrase)
       var $keyPhrase = $('<li class="key-phrase-li"> <span class="label label-primary">'+ keys[keyPhrase]+' </span></li>')
       $('#key-phrases-list').append($keyPhrase)
       var $keySentence = $('<div class="row form-group"><p>' + keyPhrases[cellId][keys[keyPhrase]]+ '</p></div>')
@@ -94,7 +92,7 @@ function updateTimeInput(range, data, dateRange, minDate) {
     var dict = new Set();
     var minDate = new Date(minDate);
     val = parseInt(val)
-    updateDate(minDate, "selectedDate_current", val, range-1);
+    updateDate(minDate, "selectedDate_current", val, Math.min(range-1, dateRange-val-1));
     updateMap(val, svg, range, data);
     if(val>0){
       updateMap(val-range, svg_prev, range, data);
@@ -104,10 +102,9 @@ function updateTimeInput(range, data, dateRange, minDate) {
       updateMap(-1, svg_prev,0, data);
       document.getElementById("selectedDate_prev").innerHTML = "";
     }
-
-    if (val < dateRange && range != dateRange){
+    if (val + range< dateRange && range != dateRange){
       updateMap(val+range, svg_next, range, data);
-      updateDate(minDate, "selectedDate_next", val+range);
+      updateDate(minDate, "selectedDate_next", val+range, Math.min(range, dateRange - val - 1 - range));
     }
     else{
       updateMap(-1, svg_next,0, data);

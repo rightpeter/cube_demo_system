@@ -45,7 +45,6 @@
 
       function changeTopic() {
           var topicIndex = parseInt(document.querySelector('input[name="topic_filter"]:checked').value);
-          console.log(topicIndex)
           var newTopicIndex = (topicIndex + 1) % 4;
           document.getElementsByName("topic_filter")[newTopicIndex].checked = true
           document.getElementsByName("topic_filter")[newTopicIndex].onchange()
@@ -118,7 +117,7 @@
                         <ul class="form-group" id="key-phrases-list"></ul>
                       </div>
 		                </div>
-                    <div>
+                    <div id="model_img_container">
                       <img id="fire_image" src="{% static "images/wildfire_example.jpg" %}" class="rounded float-right" width="450">
                     </div>
 	              </div>
