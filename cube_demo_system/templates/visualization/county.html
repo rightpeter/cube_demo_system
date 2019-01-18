@@ -18,7 +18,7 @@
           val = parseInt(val)
           minDate.setDate(minDate.getDate() + val);
           var minDateString = minDate.getMonth()+1+ "." +minDate.getDate()
-          minDate.setDate(minDate.getDate() + {{ unitDateRange }} -1);
+          minDate.setDate(minDate.getDate() + 7 -1);
           time= minDateString + "-" + (minDate.getMonth()+1)+ "." +minDate.getDate();
           county = location
           showModal({{ summary|safe }}, location,topic, time)

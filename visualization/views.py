@@ -103,7 +103,7 @@ class CityView(TemplateView):
     def get(self, request, **kwargs):
         topic = request.GET.get('topic')
         county = request.GET.get('county')
-        date_period = request.GET.get('date_period')
+        date_period = request.GET.get('time')
 
         with open('cube_demo_system/static/geo/butte.geojson') as f:
             butte = json.load(f)
