@@ -71,20 +71,19 @@ function showModal(e) {
 	var city = layer.feature.properties.cityName
 
   var cellId = [topic, city, time].join('_')
-	console.log(cellId)
 	$('#modal_title').html("City: " + city + ",  Topic: " + TOPICS[parseInt(topic)] +", Date: "+time);
   $('#summary-content').html('<div class="row form-group"> <ul class="form-group" id="key-phrases-list"></ul></div>');
   var keyPhrase;
   if (keyPhrases[cellId]){
     var keys = Object.keys(keyPhrases[cellId])
     for (keyPhrase in keys){
-      console.log(keyPhrase)
       var $keyPhrase = $('<li class="key-phrase-li"> <span class="label label-primary">'+ keys[keyPhrase]+' </span></li>')
       $('#key-phrases-list').append($keyPhrase)
       var $keySentence = $('<div class="row form-group"><p>' + keyPhrases[cellId][keys[keyPhrase]]+ '</p></div>')
       $('#summary-content').append($keySentence)
     }
   }
+  if (images[topic][city])
+    $('#fire_image').attr('src', "/static/" + images[topic][city][time]);
 	$('#city_modal').modal('show');
 }
-

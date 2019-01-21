@@ -97,3 +97,12 @@ div.form-group{
   width: 70%;
   margin-left:2%;
 }
+
+#model_img_container{
+    width: 70%
+}
+
+#model_img_container img{
+  display: block;
+  margin:auto;
+}
