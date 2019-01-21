@@ -1,5 +1,6 @@
 var FILL_COLORS=["0", "118", "58", "238"]
 var TOPICS=['Death & Injury', 'Reconstruction', 'Property Loss']
+var unitDate = 3
 
 function getFilledColor(fillColor, percentage){
   return "hsl("+fillColor+", "+Math.min(100, (percentage*100).toFixed(2))+"%, 60%)"
@@ -74,7 +75,7 @@ function updateMap(val, svg, range, data){
 }
 
 
-function updateDate(originDate, id, val, range=6){
+function updateDate(originDate, id, val, range=unitDate-1){
   var minDate = new Date(originDate.toDateString())
   minDate.setDate(minDate.getDate() + val);
   var minDateString = minDate.toDateString()
@@ -87,12 +88,12 @@ function updateTimeInput(range, data, dateRange, minDate) {
     var svg = document.getElementById("map_current").contentDocument;
     var svg_prev = document.getElementById("map_prev").contentDocument;
     var svg_next = document.getElementById("map_next").contentDocument;
-    if (range == 7)
+    if (range == unitDate)
       document.getElementById("show_all_checkbox").checked=false;
     var dict = new Set();
     var minDate = new Date(minDate);
     val = parseInt(val)
-    updateDate(minDate, "selectedDate_current", val, Math.min(range-1, dateRange-val-1));
+    updateDate(minDate, "selectedDate_current", val, Math.min(range-1, Math.max(0, dateRange-val-1)));
     updateMap(val, svg, range, data);
     if(val>0){
       updateMap(val-range, svg_prev, range, data);
@@ -120,6 +121,6 @@ function switchShowAll(data, dateRange, minDate){
     updateTimeInput(dateRange, data, dateRange, minDate);
   }
   else {
-    updateTimeInput(7, data, dateRange, minDate);
+    updateTimeInput(unitDate, data, dateRange, minDate);
   }
 }

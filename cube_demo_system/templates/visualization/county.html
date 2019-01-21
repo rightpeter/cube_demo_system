@@ -19,7 +19,7 @@
           val = parseInt(val)
           minDate.setDate(minDate.getDate() + val);
           var minDateString = minDate.getMonth()+1+ "." +minDate.getDate()
-          minDate.setDate(minDate.getDate() + 6);
+          minDate.setDate(minDate.getDate() + 2);
           time= minDateString + "-" + (minDate.getMonth()+1)+ "." +minDate.getDate();
           county = location
           showModal({{ summary|safe }}, location,topic, time)
@@ -81,7 +81,7 @@
     	<div class='selectedDated_div' id='selectedDate_current'></div>
      	<div class='selectedDated_div' id='selectedDate_next'></div>
       </div>
-      <input type="range" id="timeline_slider" list="tickmarks" step="7" min="0" max={{ dateRange }} oninput="updateTimeInput(7, {{ data|safe }}, {{dateRange}}, '{{minDate}}');" class="slider" value="0"/>
+      <input type="range" id="timeline_slider" list="tickmarks" step="3" min="0" max={{ dateRange }} oninput="updateTimeInput(3, {{ data|safe }}, {{dateRange}}, '{{minDate}}');" class="slider" value="0"/>
       <input type="checkbox" id="show_all_checkbox" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}')" checked>
       <label id="show_all_news_label"> Show All News </label>
       <p>Topic Filter:</p>
