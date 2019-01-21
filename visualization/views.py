@@ -96,7 +96,7 @@ class CountyView(TemplateView):
             'visualization/county.html', {
                 'minDate': minDate.strftime('%B %d, %Y'),
                 'dateRange': maxDate,
-                'data': raw,
+                'fireData': raw,
                 'summary': summary,
                 'image': image
             })

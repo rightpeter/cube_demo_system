@@ -10,7 +10,7 @@ function showModal(keyPhrases, location, topic, time) {
   var cellId = [topic, location, time].join('_')
 	$('#modal_title').html("County: " + location + ",  Topic: " + TOPICS[parseInt(topic)] +", Date: "+time);
   $('#summary-content').html('<div class="row form-group"> <ul class="form-group" id="key-phrases-list"></ul></div>');
-  if (images[topic][location])
+  if (images[topic][location] && images[topic][location][time])
     $('#fire_image').attr('src', "/static/" + images[topic][location][time]);
   var keyPhrase;
   if (keyPhrases[cellId]){
@@ -25,7 +25,7 @@ function showModal(keyPhrases, location, topic, time) {
 	$('#county_modal').modal('show');
 }
 
-function updateMap(val, svg, range, data){
+function updateMap(val, svg, range){
   var topicIndex = parseInt(document.querySelector('input[name="topic_filter"]:checked').value);
   var fillColor = FILL_COLORS[topicIndex];
   var dict = new Set();
@@ -33,8 +33,8 @@ function updateMap(val, svg, range, data){
   // var min = 100;
   // var max = 0;
   var index;
-  for(index in data){
-      let i = data[index];
+  for(index in fireData){
+      let i = fireData[index];
       if( i.time < val+range && i.time >= val && i.location.length && (topicIndex == 3 || i.topics[topicIndex] > 0.3 ) ){
         var locationIndex;
         for(locationIndex in i.location){
@@ -83,7 +83,7 @@ function updateDate(originDate, id, val, range=unitDate-1){
   document.getElementById(id).innerHTML= minDateString + " - " + minDate.toDateString();
 }
 
-function updateTimeInput(range, data, dateRange, minDate) {
+function updateTimeInput(range, dateRange, minDate) {
     var val = document.getElementById("timeline_slider").value;
     var svg = document.getElementById("map_current").contentDocument;
     var svg_prev = document.getElementById("map_prev").contentDocument;
@@ -94,33 +94,33 @@ function updateTimeInput(range, data, dateRange, minDate) {
     var minDate = new Date(minDate);
     val = parseInt(val)
     updateDate(minDate, "selectedDate_current", val, Math.min(range-1, Math.max(0, dateRange-val-1)));
-    updateMap(val, svg, range, data);
+    updateMap(val, svg, range);
     if(val>0){
-      updateMap(val-range, svg_prev, range, data);
+      updateMap(val-range, svg_prev, range);
       updateDate(minDate, "selectedDate_prev", val-range);
     }
     else{
-      updateMap(-1, svg_prev,0, data);
+      updateMap(-1, svg_prev,0);
       document.getElementById("selectedDate_prev").innerHTML = "";
     }
     if (val + range< dateRange && range != dateRange){
-      updateMap(val+range, svg_next, range, data);
+      updateMap(val+range, svg_next, range);
       updateDate(minDate, "selectedDate_next", val+range, Math.min(range, dateRange - val - 1 - range));
     }
     else{
-      updateMap(-1, svg_next,0, data);
+      updateMap(-1, svg_next,0);
       document.getElementById("selectedDate_next").innerHTML = "";
     }
 }
 
 
-function switchShowAll(data, dateRange, minDate){
+function switchShowAll(dateRange, minDate){
   var chk=document.getElementById("show_all_checkbox").checked;
   if (chk){
     document.getElementById("timeline_slider").value = "0";
-    updateTimeInput(dateRange, data, dateRange, minDate);
+    updateTimeInput(dateRange, dateRange, minDate);
   }
   else {
-    updateTimeInput(unitDate, data, dateRange, minDate);
+    updateTimeInput(unitDate, dateRange, minDate);
   }
 }

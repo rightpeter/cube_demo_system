@@ -8,7 +8,8 @@
       var county = null;
       var topic = null;
       var time = null;
-      var images = {{ image|safe }}
+      var fireData = {{ fireData|safe }};
+      var images = {{ image|safe }};
       function mapOnClick(e){
         topic = document.querySelector('input[name="topic_filter"]:checked').value
         if( !$('#show_all_checkbox').checked && topic<3){
@@ -27,7 +28,7 @@
       }
 
 			window.onload = function(){
-				updateTimeInput({{ dateRange }}, {{ data|safe }}, {{dateRange}}, "{{minDate}}");
+				updateTimeInput({{ dateRange }},{{dateRange}}, "{{minDate}}");
 
     		var svg = document.getElementById("map_current").contentDocument
     		var paths = svg.getElementsByTagName("path");
@@ -81,24 +82,24 @@
     	<div class='selectedDated_div' id='selectedDate_current'></div>
      	<div class='selectedDated_div' id='selectedDate_next'></div>
       </div>
-      <input type="range" id="timeline_slider" list="tickmarks" step="3" min="0" max={{ dateRange }} oninput="updateTimeInput(3, {{ data|safe }}, {{dateRange}}, '{{minDate}}');" class="slider" value="0"/>
-      <input type="checkbox" id="show_all_checkbox" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}')" checked>
+      <input type="range" id="timeline_slider" list="tickmarks" step="3" min="0" max={{ dateRange }} oninput="updateTimeInput(3, {{dateRange}}, '{{minDate}}');" class="slider" value="0"/>
+      <input type="checkbox" id="show_all_checkbox" onchange="switchShowAll( {{dateRange}}, '{{minDate}}')" checked>
       <label id="show_all_news_label"> Show All News </label>
       <p>Topic Filter:</p>
       <div class="topic_filter_container">
-        <input type="radio" id="death" name="topic_filter" value="0" checked="false" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <input type="radio" id="death" name="topic_filter" value="0" checked="false" onchange="switchShowAll({{dateRange}}, '{{minDate}}');"/>
         <label for="death">Death</label>
       </div>
       <div class="topic_filter_container">
-        <input type="radio" id="reconstruction" name="topic_filter" value="1" checked="false" onchange="switchShowAll({{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <input type="radio" id="reconstruction" name="topic_filter" value="1" checked="false" onchange="switchShowAll({{dateRange}}, '{{minDate}}');"/>
         <label for="reconstruction">Reconstruction</label>
       </div>
       <div class="topic_filter_container">
-        <input type="radio" id="property_loss" name="topic_filter" value="2" checked="false" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <input type="radio" id="property_loss" name="topic_filter" value="2" checked="false" onchange="switchShowAll( {{dateRange}}, '{{minDate}}');"/>
         <label for="property_loss">Propoerty Loss</label>
       </div>
       <div class="topic_filter_container">
-        <input type="radio" id="all_topic" name="topic_filter" value="3" checked="true" onchange="switchShowAll( {{ data|safe }}, {{dateRange}}, '{{minDate}}');"/>
+        <input type="radio" id="all_topic" name="topic_filter" value="3" checked="true" onchange="switchShowAll(  {{dateRange}}, '{{minDate}}');"/>
         <label for="all_topic">Select All Topics</label>
       </div>
       <button id="animation_btn" onclick="animationOnPlay()" value="0"> Start Animation </button>
