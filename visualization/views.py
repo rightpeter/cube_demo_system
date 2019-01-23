@@ -72,16 +72,21 @@ class CountyView(TemplateView):
         def getSVGPath(locations):
             paths = []
             for location in locations:
-                paths.append(svgPath[location])
+                if location in svgPath:
+                    paths.append(svgPath[location])
             return paths
 
-        with open('cube_demo_system/static/json/fg_title_text.json') as f:
-            data = json.load(f)
-
-        raw = list(map(lambda news: {'time': news[1], 'id': news[0].split('/')[-1], 'location': getSVGPath(news[4].keys()), 'topics': news[6]}, data))
+        directoryPath = 'cube_demo_system/static/json/'
+        with open(directoryPath + 'topic.json') as topicFile, open(directoryPath + 'county.json') as locationFile, open(directoryPath + 'time.json') as timeFile:
+            topic = json.load(topicFile)
+            location = json.load(locationFile)
+            time = json.load(timeFile)
+        raw = list(map(lambda news: {'time': news[2], 'location': getSVGPath(news[1].keys()), 'topics': news[0]}, zip(topic, location, time)))
         for i in raw:
             i['time'] = datetime.strptime(i['time'], "%Y.%m.%d")
-        minDate = min(raw, key=lambda x: x['time'])['time']
+        # minDate = min(raw, key=lambda x: x['time'])['time']
+        minDate = datetime.strptime('2018.11.07', "%Y.%m.%d")
+
         for i in raw:
             i['time'] = (i['time'] - minDate).days
         maxDate = max(raw, key=lambda x: x['time'])['time']
